@@ -22,7 +22,7 @@ function handleInteraction() {
     if (isAnimating) return;
     isAnimating = true;
 
-    // ADIM 1: AÇILIŞ
+    // ADIM 1: ZARF AÇILIŞ
     if (step === 0) {
         if(music && music.paused) { music.volume = 0.5; music.play().catch(e=>{}); }
         
@@ -56,21 +56,18 @@ function handleInteraction() {
     // ADIM 3: FOTOĞRAF DÖNGÜSÜ
     else if (step === 2) {
         
-        // 1. VAKUMLA (Safari Fix: CSS Animation kullanıyor)
         photoFrame.classList.remove('popping-out');
         photoFrame.classList.add('going-back-in');
 
-        // 2. Animasyonun bitmesini bekle (CSS süresi 0.8s)
         setTimeout(() => {
             photoFrame.classList.remove('going-back-in');
             
             photoIndex++;
 
             if (photoIndex >= photos.length) {
-                // FOTOĞRAFLAR BİTTİ - FİNAL KAPANIŞI
-                envelopeWrapper.classList.remove('open'); // Zarf kapanır
+                // FİNAL
+                envelopeWrapper.classList.remove('open'); 
                 
-                // Kapandıktan sonra eski haline dönsün
                 setTimeout(() => {
                     instruction.innerText = "Seni Seviyorum ❤️";
                     instruction.style.opacity = 1;
@@ -81,26 +78,21 @@ function handleInteraction() {
                 photoIndex = 0;
                 isAnimating = false;
             } else {
-                // YENİ FOTOĞRAF
                 showPhoto(photoIndex);
             }
 
-        }, 800); 
+        }, 800); // Vacuum süresi
     }
 }
 
 function showPhoto(index) {
     currentPhotoImg.src = photos[index];
-    
-    // Tarayıcının resmi render etmesi için minik gecikme
     setTimeout(() => {
         photoFrame.classList.add('popping-out');
     }, 50);
-    
     setTimeout(() => { isAnimating = false; }, 900); 
 }
 
-// Olay Dinleyicileri
 envelopeWrapper.addEventListener('click', handleInteraction);
 clickTrigger.addEventListener('click', handleInteraction);
 photoFrame.addEventListener('click', handleInteraction);

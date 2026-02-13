@@ -53,14 +53,16 @@ function handleInteraction() {
         step = 2;
     } 
 
-    // ADIM 3: FOTOĞRAF DÖNGÜSÜ
+    // ADIM 3: FOTOĞRAF DEĞİŞİMİ
     else if (step === 2) {
         
+        // 1. DÜŞME EFEKTİ (FALLING)
         photoFrame.classList.remove('popping-out');
-        photoFrame.classList.add('going-back-in');
+        photoFrame.classList.add('falling-down');
 
+        // 2. Animasyon süresi (1s)
         setTimeout(() => {
-            photoFrame.classList.remove('going-back-in');
+            photoFrame.classList.remove('falling-down');
             
             photoIndex++;
 
@@ -81,7 +83,7 @@ function handleInteraction() {
                 showPhoto(photoIndex);
             }
 
-        }, 800); // Vacuum süresi
+        }, 1000); // Falling süresiyle eşleşmeli
     }
 }
 

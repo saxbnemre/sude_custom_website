@@ -1,7 +1,8 @@
 :root {
     --bg-gradient-start: #ffc2cc;
     --bg-gradient-end: #e69096;
-    --paper-color: #fffbf0;
+    --paper-base: #f8e8c8; 
+    --paper-texture: #e6d0a8;
     --text-color: #4a2c2a;
 }
 
@@ -30,49 +31,43 @@ body {
     animation: animStar 100s linear infinite;
     pointer-events: none;
 }
-
-.stars {
-    width: 2px; height: 2px;
-    box-shadow: 
-        5vw 10vh #fff, 15vw 85vh #fff, 25vw 25vh #fff, 35vw 55vh #fff, 45vw 15vh #fff,
-        55vw 95vh #fff, 65vw 35vh #fff, 75vw 65vh #fff, 85vw 5vh #fff, 95vw 45vh #fff,
-        12vw 52vh #fff, 82vw 12vh #fff, 42vw 82vh #fff, 22vw 32vh #fff, 62vw 62vh #fff,
-        92vw 22vh #fff, 32vw 72vh #fff, 72vw 42vh #fff, 52vw 92vh #fff, 2vw 22vh #fff;
-    animation-duration: 50s;
-}
-
-.stars2 {
-    width: 3px; height: 3px; animation-duration: 100s;
-    box-shadow: 
-        10vw 80vh #fff, 30vw 10vh #fff, 50vw 60vh #fff, 70vw 20vh #fff, 90vw 90vh #fff,
-        20vw 40vh #fff, 40vw 90vh #fff, 60vw 30vh #fff, 80vw 70vh #fff, 5vw 50vh #fff;
-}
-
-.stars3 {
-    width: 4px; height: 4px; animation-duration: 150s;
-    box-shadow: 5vw 95vh #fff, 50vw 50vh #fff, 95vw 5vh #fff, 20vw 20vh #fff, 80vw 80vh #fff;
-}
-
+.stars { width: 2px; height: 2px; box-shadow: 5vw 10vh #fff, 15vw 85vh #fff, 25vw 25vh #fff, 35vw 55vh #fff, 45vw 15vh #fff, 55vw 95vh #fff, 65vw 35vh #fff, 75vw 65vh #fff, 85vw 5vh #fff, 95vw 45vh #fff, 12vw 52vh #fff, 82vw 12vh #fff, 42vw 82vh #fff, 22vw 32vh #fff, 62vw 62vh #fff, 92vw 22vh #fff, 32vw 72vh #fff, 72vw 42vh #fff, 52vw 92vh #fff, 2vw 22vh #fff; animation-duration: 50s; }
+.stars2 { width: 3px; height: 3px; animation-duration: 100s; box-shadow: 10vw 80vh #fff, 30vw 10vh #fff, 50vw 60vh #fff, 70vw 20vh #fff, 90vw 90vh #fff, 20vw 40vh #fff, 40vw 90vh #fff, 60vw 30vh #fff, 80vw 70vh #fff, 5vw 50vh #fff; }
+.stars3 { width: 4px; height: 4px; animation-duration: 150s; box-shadow: 5vw 95vh #fff, 50vw 50vh #fff, 95vw 5vh #fff, 20vw 20vh #fff, 80vw 80vh #fff; }
 @keyframes animStar { from { transform: translateY(0); } to { transform: translateY(-100vh); } }
+
+/* --- MÜZİK BUTONU --- */
+.pixel-btn {
+    position: fixed;
+    top: 25px; left: 25px; z-index: 1000;
+    width: 60px; height: 60px;
+    background: #fffbf0;
+    border: 4px solid var(--text-color);
+    color: var(--text-color);
+    font-size: 24px;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+    transition: all 0.1s ease;
+    border-radius: 8px;
+}
+.pixel-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
 
 .container {
     position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
     z-index: 10;
 }
 
-/* --- ZARF (ÖZEL AYAR) --- */
+/* --- ZARF (SADECE KENDİSİ BÜYÜYOR) --- */
 .envelope-wrapper {
     position: relative;
     width: 90vw; 
     max-width: 500px; 
     aspect-ratio: 3/2;
-    margin-bottom: 60px;
+    margin-bottom: 80px; /* Zarf büyük olduğu için biraz daha yukarı ittik */
     cursor: pointer;
     background-image: url('assets/img/envelope_closed.png');
     background-size: contain;
@@ -80,52 +75,36 @@ body {
     background-position: center bottom;
     
     animation: float 3s ease-in-out infinite;
-    z-index: 10;
-    
-    /* Dönüşüm (büyüme/küçülme) yumuşak olsun */
+    z-index: 10; /* Zarf en altta */
     transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
 }
 
-/* KAPALI ZARF İÇİN "ZOOM" EFEKTİ 
-   Buradaki scale(1.35) zarfı %35 daha büyük gösterir.
-*/
+/* BURASI SADECE ZARFI BÜYÜTÜR (1.9 KAT) */
 @keyframes float {
-    0%, 100% { 
-        transform: translateY(0) scale(1.35); 
-    }
-    50% { 
-        transform: translateY(-20px) scale(1.35); 
-    }
+    0%, 100% { transform: translateY(0) scale(1.9); }
+    50% { transform: translateY(-20px) scale(1.9); }
 }
 
-/* AÇIK ZARF AYARI */
 .envelope-wrapper.open {
     background-image: url('assets/img/envelope_open.png');
     aspect-ratio: 3/2.5; 
     animation: none; 
-    
-    /* Açık hali zaten görsel olarak büyük olduğu için 
-       bunu scale(1.1) yaparak dengeliyoruz. 
-       Kapalı(1.35) -> Açık(1.1) geçişi çok doğal duracak.
-    */
-    transform: translateY(30px) scale(1.1); 
+    transform: translateY(50px) scale(1.9); 
 }
 
 .click-trigger {
     position: absolute;
     top: 60%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 250px; height: 250px;
+    width: 100%; height: 100%; /* Zarfın tamamı tıklanabilir */
     z-index: 20;
 }
 .envelope-wrapper.open .click-trigger { display: none; }
 
 .ground-shadow {
-    width: 70vw;
-    height: 20px;
+    width: 70vw; height: 20px;
     background: rgba(87, 50, 50, 0.2);
-    border-radius: 50%;
-    filter: blur(10px);
+    border-radius: 50%; filter: blur(10px);
     margin-top: -50px;
     animation: shadowPulse 3s ease-in-out infinite;
 }
@@ -134,100 +113,94 @@ body {
     50% { transform: scale(0.9); opacity: 0.2; }
 }
 
-/* --- MEKTUP --- */
+/* --- MEKTUP (NORMAL BOYUTTA & BAĞIMSIZ) --- */
 .paper {
-    position: absolute;
+    position: fixed; /* Artık ekrana göre hizalanıyor, zarfa göre değil */
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scale(0.1);
+    transform: translate(-50%, -50%) scale(0.1); /* Başlangıçta küçük */
+    
+    /* İDEAL KAĞIT BOYUTU */
     width: 85vw; 
+    max-width: 350px; /* Fazla büyümesini engelledik */
     height: 60vh;
-    background: var(--paper-color);
+    max-height: 500px;
+    
+    /* RETRO STİL */
+    background-color: var(--paper-base);
+    background-image: 
+        radial-gradient(var(--paper-texture) 1px, transparent 1px),
+        radial-gradient(var(--paper-texture) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    box-shadow: inset 0 0 40px rgba(139, 69, 19, 0.1), 0 5px 15px rgba(0,0,0,0.2);
     border: 2px solid #bcaaa4;
+    
     padding: 25px;
     box-sizing: border-box;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-color);
+    font-size: 14px; line-height: 1.6; color: var(--text-color);
+    text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+    
     opacity: 0;
-    z-index: 5;
+    z-index: 100; /* Zarfın üstünde */
     transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    pointer-events: none;
 }
 
 .paper.fullscreen {
-    position: fixed;
-    top: 50%; left: 50%;
+    /* Açılınca normal boyuta (scale 1) gelir */
     transform: translate(-50%, -50%) scale(1) !important;
-    z-index: 100;
     opacity: 1;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    border-radius: 5px;
+    pointer-events: auto;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
 }
 
-/* --- FOTOĞRAF ALANI --- */
+/* --- FOTOĞRAF ALANI (NORMAL BOYUTTA & BAĞIMSIZ) --- */
 .photo-area {
     position: fixed;
     top: 50%; left: 50%;
-    width: 90vw; 
-    max-width: 420px;
+    
+    /* İDEAL FOTOĞRAF BOYUTU */
+    width: 80vw; 
+    max-width: 320px; /* Fazla büyümesini engelledik */
     height: auto;
-    z-index: 1000;
+    
+    z-index: 200; /* Kağıdın da üstünde */
     opacity: 0;
     pointer-events: none;
     transform: translate(-50%, -50%) scale(0);
 }
 
 .photo-inner {
-    width: 100%;
-    background: #fff;
+    width: 100%; background: #fff;
     padding: 12px 12px 60px 12px;
     box-shadow: 0 15px 50px rgba(0,0,0,0.5);
-    border-radius: 2px;
-    box-sizing: border-box;
+    border-radius: 2px; box-sizing: border-box;
 }
 .photo-inner img { width: 100%; display: block; border: 1px solid #ddd; }
 
-
-/* --- ANİMASYONLAR --- */
-
+/* Animasyonlar */
 .photo-area.popping-out {
-    opacity: 1;
-    pointer-events: auto;
+    opacity: 1; pointer-events: auto;
     animation: popOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
-
 @keyframes popOut {
     0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) scale(1) rotate(360deg); }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(360deg); } /* Normal Scale 1 */
 }
 
-/* DÜŞME EFEKTİ */
 .photo-area.falling-down {
     animation: fallDown 1s ease-in forwards;
 }
-
 @keyframes fallDown {
-    0% { 
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1) rotate(0deg);
-    }
-    100% { 
-        opacity: 0;
-        transform: translate(-50%, 150vh) scale(0.8) rotate(45deg);
-    }
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, 150vh) scale(0.8) rotate(45deg); }
 }
 
 .click-instruction {
-    position: fixed;
-    bottom: 30px;
-    width: 100%;
-    text-align: center;
-    color: #8d6e63;
-    font-size: 15px; 
-    font-weight: bold;
-    letter-spacing: 1px;
-    animation: blink 1.5s infinite;
-    pointer-events: none;
-    text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+    position: fixed; bottom: 30px; width: 100%; text-align: center;
+    color: #8d6e63; font-size: 15px; font-weight: bold;
+    letter-spacing: 1px; animation: blink 1.5s infinite;
+    pointer-events: none; text-shadow: 0 1px 2px rgba(255,255,255,0.5);
 }
 @keyframes blink { 
     0%, 100% { opacity: 1; transform: scale(1); } 

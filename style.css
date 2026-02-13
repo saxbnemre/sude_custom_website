@@ -1,0 +1,228 @@
+:root {
+    --bg-gradient-start: #ffc2cc; /* Tatlı Pembe */
+    --bg-gradient-end: #e69096;   /* Koyu Gül */
+    --paper-color: #fffbf0;
+    --text-color: #4a2c2a;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    margin: 0;
+    height: 100vh;
+    /* Safari'de 100vh sorunu için dvh kullanımı */
+    height: 100dvh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+    overflow: hidden;
+    image-rendering: pixelated;
+    -webkit-font-smoothing: antialiased;
+    perspective: 1000px; /* 3D derinlik */
+}
+
+/* --- YILDIZLAR (DAHA YOĞUN) --- */
+.stars, .stars2, .stars3, .stars4, .stars5 {
+    position: fixed;
+    top: 0; left: 0; 
+    background: transparent;
+    z-index: 1;
+    opacity: 0.9;
+    animation: animStar 50s linear infinite;
+    pointer-events: none;
+}
+
+/* Farklı boyut ve hızlarda yıldızlar */
+.stars  { width: 2px; height: 2px; box-shadow: 5vw 10vh #fff, 20vw 80vh #fff, 90vw 20vh #fff; }
+.stars2 { width: 3px; height: 3px; animation-duration: 80s; box-shadow: 15vw 40vh #fff, 60vw 10vh #fff, 80vw 60vh #fff; }
+.stars3 { width: 4px; height: 4px; animation-duration: 120s; box-shadow: 10vw 90vh #fff, 50vw 50vh #fff; }
+.stars4 { width: 2px; height: 2px; animation-duration: 40s; box-shadow: 30vw 30vh #fff, 70vw 70vh #fff; } /* Yeni */
+.stars5 { width: 3px; height: 3px; animation-duration: 60s; box-shadow: 40vw 80vh #fff, 80vw 10vh #fff; } /* Yeni */
+
+@keyframes animStar { 
+    from { transform: translateY(0px); } 
+    to { transform: translateY(-100vh); } 
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+/* --- ZARF (MOBİLDE DEVASA) --- */
+.envelope-wrapper {
+    position: relative;
+    /* MOBİL İÇİN BÜYÜTME: Ekranın %90'ı genişliğinde */
+    width: 90vw; 
+    max-width: 600px; /* Masaüstünde çok devasa olmasın */
+    aspect-ratio: 3/2;
+    
+    margin-bottom: 40px;
+    cursor: pointer;
+    background-image: url('assets/img/envelope_closed.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    
+    /* Süzülme Animasyonu */
+    animation: float 3s ease-in-out infinite;
+    z-index: 10;
+    /* Safari transition fix */
+    transition: transform 0.5s ease, height 0.3s ease; 
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+/* Zarf Açık Hali */
+.envelope-wrapper.open {
+    background-image: url('assets/img/envelope_open.png');
+    aspect-ratio: 3/2.5; /* Daha uzun */
+    animation: none; /* Süzülme durur */
+    transform: translateY(20px); /* Biraz aşağı iner */
+}
+
+.click-trigger {
+    position: absolute;
+    top: 60%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px; height: 150px;
+    z-index: 20;
+}
+.envelope-wrapper.open .click-trigger { display: none; }
+
+/* Gölge */
+.ground-shadow {
+    width: 60vw;
+    height: 15px;
+    background: rgba(87, 50, 50, 0.2);
+    border-radius: 50%;
+    filter: blur(8px);
+    margin-top: -30px;
+    animation: shadowPulse 3s ease-in-out infinite;
+}
+@keyframes shadowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(0.8); opacity: 0.2; }
+}
+
+
+/* --- MEKTUP --- */
+.paper {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    width: 85vw; /* Mobilde geniş */
+    height: 60vh;
+    background: var(--paper-color);
+    border: 2px solid #bcaaa4;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0;
+    z-index: 5;
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+.paper.fullscreen {
+    position: fixed;
+    /* Safari Centering Fix */
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(1) !important;
+    z-index: 100;
+    opacity: 1;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    border-radius: 5px;
+}
+
+
+/* --- FOTOĞRAF ALANI (SAFARI VAKUM FİX) --- */
+.photo-area {
+    position: fixed;
+    /* Ekranın tam ortası */
+    top: 50%; 
+    left: 50%;
+    /* Başlangıçta tam ortada ama görünmez ve küçücük */
+    transform: translate(-50%, -50%) scale(0);
+    
+    width: 90vw; /* Mobilde ekranı doldursun */
+    max-width: 400px;
+    height: auto;
+    
+    z-index: 1000; /* En üstte olduğundan emin ol */
+    opacity: 0;
+    pointer-events: none;
+}
+
+.photo-inner {
+    width: 100%;
+    background: #fff;
+    padding: 10px 10px 50px 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    border-radius: 2px;
+}
+.photo-inner img { width: 100%; display: block; border: 1px solid #ddd; }
+
+
+/* --- ANİMASYONLAR (KEYFRAMES İLE) --- */
+
+/* ÇIKIŞ: Dönerek büyüme */
+.photo-area.popping-out {
+    opacity: 1;
+    pointer-events: auto;
+    /* Keyframe animasyonu kullanıyoruz */
+    animation: popOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popOut {
+    0% { transform: translate(-50%, 50px) scale(0) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(360deg); }
+}
+
+/* GİRİŞ: VAKUMLANMA (SAFARI İÇİN) */
+.photo-area.going-back-in {
+    /* Keyframe animasyonu kullanıyoruz */
+    animation: vacuum 0.8s ease-in-out forwards;
+}
+
+@keyframes vacuum {
+    0% { 
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+    100% { 
+        opacity: 0;
+        /* Aşağıya (Y: 150px) ve ortaya doğru küçülerek git */
+        transform: translate(-50%, 150px) scale(0.01) rotate(-180deg);
+    }
+}
+
+
+/* --- YAZI (DAHA BÜYÜK) --- */
+.click-instruction {
+    position: fixed;
+    bottom: 50px;
+    width: 100%;
+    text-align: center;
+    color: #8d6e63;
+    font-size: 16px; /* BÜYÜTÜLDÜ (10px -> 16px) */
+    font-weight: bold;
+    letter-spacing: 1px;
+    animation: blink 1.5s infinite; /* Daha hızlı yanıp sönme */
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+}
+@keyframes blink { 
+    0%, 100% { opacity: 1; transform: scale(1); } 
+    50% { opacity: 0.4; transform: scale(0.95); } 
+}

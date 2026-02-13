@@ -22,7 +22,7 @@ function handleInteraction() {
     if (isAnimating) return;
     isAnimating = true;
 
-    // ADIM 1: ZARF AÇILIŞ
+    // ADIM 1: AÇILIŞ
     if (step === 0) {
         if(music && music.paused) { music.volume = 0.5; music.play().catch(e=>{}); }
         
@@ -56,11 +56,10 @@ function handleInteraction() {
     // ADIM 3: FOTOĞRAF DEĞİŞİMİ
     else if (step === 2) {
         
-        // 1. DÜŞME EFEKTİ (FALLING)
+        // DÜŞME EFEKTİ
         photoFrame.classList.remove('popping-out');
         photoFrame.classList.add('falling-down');
 
-        // 2. Animasyon süresi (1s)
         setTimeout(() => {
             photoFrame.classList.remove('falling-down');
             
@@ -83,7 +82,7 @@ function handleInteraction() {
                 showPhoto(photoIndex);
             }
 
-        }, 1000); // Falling süresiyle eşleşmeli
+        }, 1000); 
     }
 }
 

@@ -2,6 +2,16 @@ const photos = [
     'assets/img/foto1.jpg',
     'assets/img/foto2.jpg',
     'assets/img/foto3.jpg',
+    'assets/img/foto4.jpg',
+    'assets/img/foto5.jpg',
+    'assets/img/foto6.jpg',
+    'assets/img/foto7.jpg',
+    'assets/img/foto8.jpg',
+    'assets/img/foto9.jpg',
+    'assets/img/foto10.jpg',
+    'assets/img/foto11.jpg',
+    'assets/img/foto12.jpg',
+    'assets/img/foto13.jpg',
 ];
 
 const envelopeWrapper = document.getElementById('envelope');
@@ -17,6 +27,9 @@ const musicToggleBtn = document.getElementById('music-toggle');
 let step = 0; 
 let photoIndex = 0;
 let isAnimating = false;
+
+// BAŞLANGIÇTA ZARF SÜZÜLSÜN
+envelopeWrapper.classList.add('floating');
 
 musicToggleBtn.addEventListener('click', () => {
     if (music.paused) {
@@ -35,17 +48,32 @@ function handleInteraction() {
     if (isAnimating) return;
     isAnimating = true;
 
-    if (step === 0) {
-        instruction.style.opacity = 0;
-        shadow.style.opacity = 0;
-        envelopeWrapper.classList.add('open'); 
+   // script.js dosyasında bu kısmı bul:
+if (step === 0) {
+    // ... müzik kodları vs ...
+    
+    instruction.style.opacity = 0; // Eski yazıyı gizlemiştik
+    shadow.style.opacity = 0;
+    
+    envelopeWrapper.classList.add('open'); 
+    
+    setTimeout(() => {
+        letter.classList.add('fullscreen');
         
-        setTimeout(() => {
-            letter.classList.add('fullscreen');
-            setTimeout(() => { isAnimating = false; }, 800);
-        }, 400);
-        step = 1;
-    } 
+        // --- BURAYA DİKKAT (Değişiklik Burada) ---
+        setTimeout(() => { 
+            // BU İKİ SATIRI EKLE:
+            instruction.innerText = "Zaman kapsülünü aç!"; // Yazıyı değiştir
+            instruction.style.opacity = 1;         // Tekrar görünür yap
+            
+            isAnimating = false; 
+        }, 800);
+        // ----------------------------------------
+
+    }, 400);
+
+    step = 1;
+}
     else if (step === 1) {
         letter.classList.remove('fullscreen');
         setTimeout(() => {
@@ -53,25 +81,37 @@ function handleInteraction() {
             showPhoto(photoIndex);
         }, 800);
         instruction.style.opacity = 1;
-        instruction.innerText = "Devam et...";
+        instruction.innerText = "Devam et!";
         step = 2;
     } 
     else if (step === 2) {
+        photoFrame.classList.remove('floating');
         photoFrame.classList.remove('popping-out');
         photoFrame.classList.add('falling-down');
+
         setTimeout(() => {
             photoFrame.classList.remove('falling-down');
             photoIndex++;
             if (photoIndex >= photos.length) {
+                // FİNAL KAPANIŞI
                 envelopeWrapper.classList.remove('open'); 
+                
+                // NOT: 'floating' sınıfını hemen eklemiyoruz!
+                // CSS'teki 2.5s transition bitene kadar bekliyoruz.
+                
                 setTimeout(() => {
-                    instruction.innerText = "Seni Seviyorum ❤️";
+                    instruction.innerText = "umarım begenmissindir askim";
                     instruction.style.opacity = 1;
                     shadow.style.opacity = 0.3;
-                }, 500);
-                step = 0; 
-                photoIndex = 0;
-                isAnimating = false;
+                    
+                    // Kapanma bitti, şimdi tekrar süzülmeye başla
+                    envelopeWrapper.classList.add('floating');
+                    
+                    step = 0; 
+                    photoIndex = 0;
+                    isAnimating = false;
+                }, 2500); // 2.5 Saniye Bekle (CSS transition süresi ile aynı)
+                
             } else {
                 showPhoto(photoIndex);
             }
@@ -84,7 +124,13 @@ function showPhoto(index) {
     setTimeout(() => {
         photoFrame.classList.add('popping-out');
     }, 50);
-    setTimeout(() => { isAnimating = false; }, 900); 
+
+    setTimeout(() => {
+        if(step === 2 && photoFrame.classList.contains('popping-out')) {
+            photoFrame.classList.add('floating');
+        }
+        isAnimating = false; 
+    }, 800); 
 }
 
 envelopeWrapper.addEventListener('click', handleInteraction);
